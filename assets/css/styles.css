@@ -22,13 +22,19 @@ h1 {
     margin: 1rem 0 1rem;
 }
 
+.question {
+
+}
+
+.question-option {
+
+}
+
 .btn {
     outline: none;
     border: none;
     background-color: #351C75;
     color: white;
-    padding: 1rem;
-    border-radius: 0.55rem;
 }
 
 .btn:focus {
@@ -37,6 +43,8 @@ h1 {
 
 .big-btn {
     font-size: 1.3rem;
+    padding: 1rem;
+    border-radius: 0.55rem;
 }
 
 /* Nav/Timer (Header) Bar Styling */
