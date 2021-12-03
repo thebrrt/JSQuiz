@@ -128,17 +128,17 @@ var questions = [
     {
         question: "Which operator is used to assign a value to a variable?",
         options: ["=", "x", "*", "-"],
-        answerIndex: 
+        answerIndex: 0
     },
     {
-        question: "",
-        options: [""],
-        answerIndex: 
+        question: "What will the following code return: Boolean(10 > 9)",
+        options: ["True", "False", "NaN"],
+        answerIndex: 0
     },
     {
-        question: "",
-        options: [""],
-        answerIndex: 
+        question: "Is JavaScript case-sensitive?",
+        options: ["No", "Yes"],
+        answerIndex: 1
     },
 ];
 
