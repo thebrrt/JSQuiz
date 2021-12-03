@@ -2,6 +2,8 @@
 
 Submission for full-stack web development bootcamp at University of Central Florida
 
+ALSO Major Shoutout to W3 Schools for the question set. Pulled from https://www.w3schools.com/quiztest/quiztest.asp?qtest=JS
+
 ### User Story
 
 AS A coding bootcamp student
