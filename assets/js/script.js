@@ -2,11 +2,9 @@
 var sessionScore = 0;
 
 var questionsAnswered = [];
-var questionAnswerIndex = 0;
-
-var text = "te"; // DELETE BEFORE MERGING TO MAIN - added to avoid exceptions for now
 
 var mainEl = document.getElementsByTagName("main")[0];
+var footerEl = null;
 
 // Question Array - Lots of scrolling
 var questions = [
@@ -143,27 +141,53 @@ var questions = [
 ];
 
 // Functions
-function questionGenerator() { // UNTESTED
-    // Question draw
-    questionNumber = Math.round(Math.random() * (questions.length - 1));
+function questionGenerator(accuracy) {
+    // Question draw and send to "used" list
+    var drawnQuestion = questions[Math.round(Math.random() * (questions.length - 1))];
+    var pos = questions.indexOf(drawnQuestion);
+    questions.splice(pos);
 
-    // Create and append question
+    // Create and append question to main element
     var questionEl = document.createElement("h1");
-    questionEl.className = "question";
+    questionEl.className = "question"; // No styles defined for this class in styles.css, but wanted to future-proof things
+    questionEl.textContent = drawnQuestion.question;
     mainEl.appendChild(questionEl);
 
-    //Create and append answer options
+    // Create answer container and append answer options
+    var divEl = document.createElement("div");
+    divEl.className = "answer-container";
+    mainEl.appendChild(divEl);
+
+    var optionIndex = 0;
     var i = 1;
-    while (i < questions[questionNumber].options.length) {
+    while (optionIndex < drawnQuestion.options.length) {
         var optionEl = document.createElement("button");
         optionEl.className = "btn question-option";
-        optionEl.textContent = i + ". " + questions[questionNumber].options[i];
-        if (questions[questionNumber].options[i].answerIndex = i) {
+        optionEl.textContent = i + ". " + drawnQuestion.options[optionIndex];
+        if (drawnQuestion.answerIndex === optionIndex) {
             optionEl.setAttribute("value", "correct");
+        } else {
+            optionEl.setAttribute("value", "wrong");
         }
 
-        mainEl.appendChild(optionEl);
+        divEl.appendChild(optionEl);
+        optionIndex++;
         i++;
+    }
+
+    // Generate & Append Correct/Wrong Footer
+    if (!accuracy) {
+        var footerH2 = document.createElement("h2");
+        footerH2.className = "accuracy-footer";
+        footerEl = footerH2;
+    }
+
+    if (accuracy === "correct") {
+        footerEl.innerText = "Correct!";
+        mainEl.appendChild(footerEl);
+    } else if (accuracy === "wrong") {
+        footerEl.innerText = "Wrong!";
+        mainEl.appendChild(footerEl);
     }
 }
 
@@ -180,8 +204,16 @@ function btnClickHandler(event) {
     var clickedEl = event.target;
 
     if (clickedEl.matches("[value='start'")) {
+        sessionScore = 0;
         mainReset();
         questionGenerator();
+    } else if (clickedEl.matches("[value='correct']")) {
+        sessionScore++;
+        mainReset();
+        questionGenerator("correct");
+    } else if (clickedEl.matches("[value='wrong']")) {
+        mainReset();
+        questionGenerator("wrong");
     }
 }
 
