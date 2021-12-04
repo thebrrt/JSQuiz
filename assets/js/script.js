@@ -257,11 +257,6 @@ function showScores(event) {
         backEl.setAttribute("value", "back");
         mainEl.appendChild(backEl);
     }
-
-    
-
-    
-    
 }
 
 function endGame() {
