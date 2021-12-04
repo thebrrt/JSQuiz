@@ -5,6 +5,8 @@ var questionsAnswered = [];
 
 var mainEl = document.getElementsByTagName("main")[0];
 var footerEl = null;
+var clockEl = document.getElementById("timer");
+var clockTime = 30;
 
 // Question Array - Lots of scrolling
 var questions = [
@@ -141,9 +143,18 @@ var questions = [
 ];
 
 // Functions
+function clockTick() {
+    clockTime--;
+    clockEl.innerHTML = "Time: " + clockTime.toString();
+}
+
+function initializeClock() {
+    clockEl.innerHTML = "Time: 30";
+    setInterval(clockTick, 1000);
+}
 function questionGenerator(accuracy) {
     // Question draw and send to "used" list
-    var drawnQuestion = questions[Math.round(Math.random() * (questions.length - 1))];
+    var drawnQuestion = questions[Math.round(Math.random() * (questions.length))];
     var pos = questions.indexOf(drawnQuestion);
     questions.splice(pos);
 
@@ -207,6 +218,7 @@ function btnClickHandler(event) {
         sessionScore = 0;
         mainReset();
         questionGenerator();
+        initializeClock();
     } else if (clickedEl.matches("[value='correct']")) {
         sessionScore++;
         mainReset();
