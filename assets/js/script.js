@@ -165,16 +165,6 @@ function initializeClock() {
     clock = setInterval(clockTick, 1000);
 }
 
-function packageScore(initials, score) {
-    var package = {
-        initials: initials,
-        score: score
-    };
-
-    console.log("Score Packaged as", package);
-    return package;
-}
-
 function saveScore(newInitials) {
     loadScores();
     var newHigh = packageScore(newInitials, sessionScore);
@@ -215,6 +205,10 @@ function showScores(event) {
     scoreH1El.className = "congrats";
     scoreH1El.innerHTML = "High scores";
     mainEl.appendChild(scoreH1El);
+
+    var divEl = document.createElement("div");
+    divEl.className = "button-container";
+
     
     if (highScores) {
         var scoreContainer = document.createElement("div");
@@ -243,20 +237,22 @@ function showScores(event) {
         backEl.innerHTML = "Go back";
         backEl.id = "back";
         backEl.setAttribute("value", "back");
-        mainEl.appendChild(backEl);
+        divEl.appendChild(backEl);
 
         var clearEl = document.createElement("button");
-        clearEl.className = "btn";
+        clearEl.className = "btn score-button";
         clearEl.innerHTML = "Clear high scores";
         clearEl.setAttribute("value", "clear");
-        mainEl.appendChild(clearEl);
+        divEl.appendChild(clearEl);
     } else {
         var backEl = document.createElement("button");
-        backEl.className = "btn";
+        backEl.className = "btn score-button";
         backEl.innerHTML = "Go back";
         backEl.setAttribute("value", "back");
-        mainEl.appendChild(backEl);
+        divEl.appendChild(backEl);
     }
+
+    mainEl.appendChild(divEl);
 }
 
 function endGame() {
@@ -365,6 +361,16 @@ function mainReset() { // Seeks and destroys main's children (too much?)
     for (var i = 0; i < loops; i++) {
         targetChildren[0].parentNode.removeChild(targetChildren[0]);
     }
+}
+
+function packageScore(initials, score) {
+    var package = {
+        initials: initials,
+        score: score
+    };
+
+    console.log("Score Packaged as", package);
+    return package;
 }
 
 function btnClickHandler(event) {

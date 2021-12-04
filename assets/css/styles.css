@@ -43,7 +43,7 @@ h1 {
     background-color: #351C75;
     color: white;
     border-radius: 0.55rem;
-    padding: 0.5rem;
+    padding: 0.5rem 1.5rem;
 }
 
 .btn:focus {
@@ -131,31 +131,62 @@ main {
 }
 
 #back {
-    margin-right: 30px;
+    margin-bottom: 20px;
 }
 
-
-
-
-/* DELETES FOR BIGGER RESOLUTIONS
-
-main {
-    justify-content: normal;
-}
-
-.question-answer {
-    max-width: 50%;
-}
-
-#initials-container {
-    flex: 1;
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
     margin-top: 20px;
-    Delete justify, align-items: center;
-    flex-direction: row;
-    flex-wrap: no-wrap;
 }
 
-COMPLETELY RESET INDIVIDUAL MARGINS, etc for initials form items
+#score-container {
+    margin-top: 20px;
+}
 
+#score-container * {
+    margin: 0;
+    text-align: left;
+}
 
-*/
+@media screen and (min-width: 768px) {
+    main {
+        justify-content: normal;
+    }
+
+    .question-option {
+        max-width: 50%;
+    }
+    
+    #initials-container {
+        flex: 1;
+        margin-top: 20px;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    #user-input {
+        margin: 0 10px 0 2px;
+    }
+
+    #submit {
+        margin-top: unset;
+        width: 7.5rem;
+    }
+
+    .congrats {
+        text-align: left;
+    }
+
+    .button-container {
+        margin-top: 20px;
+        flex-direction: row;
+    }
+
+    #back {
+        margin-right: 30px;
+        margin-bottom: 0;
+    }
+}
