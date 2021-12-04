@@ -216,39 +216,52 @@ function showScores(event) {
     scoreH1El.innerHTML = "High scores";
     mainEl.appendChild(scoreH1El);
     
-    var scoreContainer = document.createElement("div");
-    scoreContainer.class = "congrats ";
-    scoreContainer.id = "score-container";
-    mainEl.appendChild(scoreContainer);
+    if (highScores) {
+        var scoreContainer = document.createElement("div");
+        scoreContainer.class = "congrats ";
+        scoreContainer.id = "score-container";
+        mainEl.appendChild(scoreContainer);
 
-    var ranking = 1;
-    for (var i = 0; i < highScores.length; i++) {
-        var scorePairEl = document.createElement("p");
-        if (ranking % 2) {
-            scorePairEl.className = "congrats score-odd";
-            scorePairEl.innerHTML = ranking + " " + highScores[i].initials + " - " + highScores[i].score;
-            ranking++;
-            scoreContainer.appendChild(scorePairEl);
-        } else {
-            scorePairEl.className = "congrats score-even";
-            scorePairEl.innerHTML = ranking + " " + highScores[i].initials + " - " + highScores[i].score;
-            ranking++;
-            scoreContainer.appendChild(scorePairEl);
+        var ranking = 1;
+        for (var i = 0; i < highScores.length; i++) {
+            var scorePairEl = document.createElement("p");
+            if (ranking % 2) {
+                scorePairEl.className = "congrats score-odd";
+                scorePairEl.innerHTML = ranking + " " + highScores[i].initials + " - " + highScores[i].score;
+                ranking++;
+                scoreContainer.appendChild(scorePairEl);
+            } else {
+                scorePairEl.className = "congrats score-even";
+                scorePairEl.innerHTML = ranking + " " + highScores[i].initials + " - " + highScores[i].score;
+                ranking++;
+                scoreContainer.appendChild(scorePairEl);
+            }
         }
+
+        var backEl = document.createElement("button");
+        backEl.className = "btn";
+        backEl.innerHTML = "Go back";
+        backEl.id = "back";
+        backEl.setAttribute("value", "back");
+        mainEl.appendChild(backEl);
+
+        var clearEl = document.createElement("button");
+        clearEl.className = "btn";
+        clearEl.innerHTML = "Clear high scores";
+        clearEl.setAttribute("value", "clear");
+        mainEl.appendChild(clearEl);
+    } else {
+        var backEl = document.createElement("button");
+        backEl.className = "btn";
+        backEl.innerHTML = "Go back";
+        backEl.setAttribute("value", "back");
+        mainEl.appendChild(backEl);
     }
 
-    var backEl = document.createElement("button");
-    backEl.className = "btn";
-    backEl.innerHTML = "Go back";
-    backEl.id = "back";
-    backEl.setAttribute("value", "back");
-    mainEl.appendChild(backEl);
+    
 
-    var clearEl = document.createElement("button");
-    clearEl.className = "btn";
-    clearEl.innerHTML = "Clear high scores";
-    clearEl.setAttribute("value", "clear");
-    mainEl.appendChild(clearEl);
+    
+    
 }
 
 function endGame() {
