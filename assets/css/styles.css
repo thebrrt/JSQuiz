@@ -43,6 +43,7 @@ h1 {
     background-color: #351C75;
     color: white;
     border-radius: 0.55rem;
+    padding: 0.5rem;
 }
 
 .btn:focus {
@@ -95,12 +96,14 @@ main {
 /* Post-Game Score Submission and Display */
 .congrats {
     width: 100%;
+    text-align: center;
 }
 
 #initials-container {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
     margin-top: 20px;
 }
 
@@ -113,6 +116,25 @@ main {
     height: 34px;
     width: 40vw;
 }
+
+#score-container {
+    width: 100%;
+}
+
+.score-even {
+    background-color: #FFFFFF;
+}
+
+.score-odd {
+    background-color: #D9D3E9;
+}
+
+#back {
+    margin-right: 30px;
+}
+
+/* LeaderBoard Styling */
+
 
 /* DELETES FOR BIGGER RESOLUTIONS
 
@@ -128,6 +150,8 @@ main {
     flex: 1;
     margin-top: 20px;
     Delete justify, align-items: center;
+    flex-direction: row;
+    flex-wrap: no-wrap;
 }
 
 COMPLETELY RESET INDIVIDUAL MARGINS, etc for initials form items

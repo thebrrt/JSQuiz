@@ -5,10 +5,13 @@ var questionsAnswered = [];
 var pos = null;
 
 var mainEl = document.getElementsByTagName("main")[0];
+var scoreView = document.getElementsByTagName("p")[0];
 var footerEl = null;
 var clockEl = document.getElementById("timer");
 var clock = null;
 var clockTime = null;
+
+highScores = [];
 
 // Question Array - Lots of scrolling
 var questions = [
@@ -144,8 +147,6 @@ var questions = [
     },
 ];
 
-var highScores = [];
-
 // Functions
 function clockTick() {
     if (clockTime <= 0) {
@@ -164,8 +165,90 @@ function initializeClock() {
     clock = setInterval(clockTick, 1000);
 }
 
+function packageScore(initials, score) {
+    var package = {
+        initials: initials,
+        score: score
+    };
+
+    console.log("Score Packaged as", package);
+    return package;
+}
+
 function saveScore(newInitials) {
+    loadScores();
+    var newHigh = packageScore(newInitials, sessionScore);
+
+    if (highScores) {
+        highScores.push(newHigh);
+        highScores.sort(function(a, b){return a.score - b.score;});
+    } else {
+        newHighScores = [newHigh];
+        highScores = [newHigh];
+    }
+
+    console.log("high scores object:", highScores);
+    localStorage.setItem("high scores", JSON.stringify(highScores));
+}
+
+function loadScores() {
+    try {
+        highScores = JSON.parse(localStorage.getItem("high scores"));
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function clearScores() {
+    highScores = [];
+    location.reload();
+}
+
+function showScores(event) {
+    if (event) {
+        clearInterval(clock);
+    }
+    loadScores();
+    mainReset();
+
+    var scoreH1El = document.createElement("h1");
+    scoreH1El.className = "congrats";
+    scoreH1El.innerHTML = "High scores";
+    mainEl.appendChild(scoreH1El);
     
+    var scoreContainer = document.createElement("div");
+    scoreContainer.class = "congrats ";
+    scoreContainer.id = "score-container";
+    mainEl.appendChild(scoreContainer);
+
+    var ranking = 1;
+    for (var i = 0; i < highScores.length; i++) {
+        var scorePairEl = document.createElement("p");
+        if (ranking % 2) {
+            scorePairEl.className = "congrats score-odd";
+            scorePairEl.innerHTML = ranking + " " + highScores[i].initials + " - " + highScores[i].score;
+            ranking++;
+            scoreContainer.appendChild(scorePairEl);
+        } else {
+            scorePairEl.className = "congrats score-even";
+            scorePairEl.innerHTML = ranking + " " + highScores[i].initials + " - " + highScores[i].score;
+            ranking++;
+            scoreContainer.appendChild(scorePairEl);
+        }
+    }
+
+    var backEl = document.createElement("button");
+    backEl.className = "btn";
+    backEl.innerHTML = "Go back";
+    backEl.id = "back";
+    backEl.setAttribute("value", "back");
+    mainEl.appendChild(backEl);
+
+    var clearEl = document.createElement("button");
+    clearEl.className = "btn";
+    clearEl.innerHTML = "Clear high scores";
+    clearEl.setAttribute("value", "clear");
+    mainEl.appendChild(clearEl);
 }
 
 function endGame() {
@@ -277,19 +360,29 @@ function mainReset() { // Seeks and destroys main's children (too much?)
 }
 
 function btnClickHandler(event) {
+    event.preventDefault();
     var clickedEl = event.target;
 
-    if (clickedEl.matches("[value='start'")) {
+    if (clickedEl.matches("[value='start']")) {
         sessionScore = 0;
         mainReset();
         questionGenerator();
         initializeClock();
     } else if(clickedEl.matches("[value='submitInitials']")) {
-        var userInitials = document.getElementById("user");
-        userInitials = userInitials.value;
-        mainReset();
-        saveScore(userInitials);
-    }  else if (clickedEl.matches("[value='correct']")) {
+        var userInitials = document.getElementById("user-input");
+        if (userInitials.value) {
+            userInitials = userInitials.value;
+            saveScore(userInitials);
+            showScores();
+        } else {
+            userInitials.setAttribute("placeholder", "Please enter your initials");
+        }
+    } else if (clickedEl.matches("[value='back']")) {
+        location.reload();
+    } else if (clickedEl.matches("[value='clear']")) {
+        localStorage.removeItem("high scores");
+        location.reload();
+    } else if (clickedEl.matches("[value='correct']")) {
         sessionScore++;
         mainReset();
         questionGenerator("correct");
@@ -301,3 +394,4 @@ function btnClickHandler(event) {
 
 // Event Listeners
 mainEl.addEventListener("click", btnClickHandler);
+scoreView.addEventListener("click", showScores);
