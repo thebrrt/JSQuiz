@@ -2,11 +2,13 @@
 var sessionScore = 0;
 
 var questionsAnswered = [];
+var pos = null;
 
 var mainEl = document.getElementsByTagName("main")[0];
 var footerEl = null;
 var clockEl = document.getElementById("timer");
-var clockTime = 30;
+var clock = null;
+var clockTime = null;
 
 // Question Array - Lots of scrolling
 var questions = [
@@ -142,63 +144,126 @@ var questions = [
     },
 ];
 
+var highScores = [];
+
 // Functions
 function clockTick() {
-    clockTime--;
+    if (clockTime <= 0) {
+        clearInterval(clock);
+        endGame();
+    } else {
+        clockTime--;
+    }
+
     clockEl.innerHTML = "Time: " + clockTime.toString();
 }
 
 function initializeClock() {
-    clockEl.innerHTML = "Time: 30";
-    setInterval(clockTick, 1000);
+    clockTime = 30;
+    clockEl.innerHTML = "Time: " + clockTime;
+    clock = setInterval(clockTick, 1000);
 }
+
+function saveScore(newInitials) {
+    
+}
+
+function endGame() {
+    if (clockTime > 0) {
+        clearInterval(clock);
+    }
+    mainReset();
+
+    var endHEl = document.createElement("h1");
+    endHEl.className = "congrats";
+    endHEl.innerHTML = "All done!";
+    mainEl.appendChild(endHEl);
+
+    var scoreEl = document.createElement("p");
+    scoreEl.className = "congrats";
+    scoreEl.innerHTML = "Your final score is " + sessionScore + ".";
+    mainEl.appendChild(scoreEl);
+
+    var formEl = document.createElement("form");
+    formEl.id = "initials-container";
+    mainEl.appendChild(formEl);
+
+    var labelEl = document.createElement("label");
+    labelEl.setAttribute("id", "user-label");
+    labelEl.setAttribute("for", "user");
+    labelEl.innerHTML = "Enter initials:";
+    formEl.appendChild(labelEl);
+
+    var inputEl = document.createElement("input");
+    inputEl.setAttribute("id", "user-input");
+    inputEl.setAttribute("name", "initials");
+    formEl.appendChild(inputEl);
+
+    var submitEl = document.createElement("button");
+    submitEl.setAttribute("value", "submitInitials");
+    submitEl.id = "submit";
+    submitEl.className = "btn";
+    submitEl.innerHTML = "Submit";
+    formEl.appendChild(submitEl);
+}
+
 function questionGenerator(accuracy) {
-    // Question draw and send to "used" list
-    var drawnQuestion = questions[Math.round(Math.random() * (questions.length))];
-    var pos = questions.indexOf(drawnQuestion);
-    questions.splice(pos);
+    if (!questions.length) {
+        endGame();
+    } else {
+        // Question draw and send to "used" list
+        var questionIndex = Math.random() * questions.length;
+        console.log(questionIndex);
+        questionIndex = Math.floor(questionIndex);
+        console.log(questionIndex);
+        var drawnQuestion = questions[questionIndex];
+        pos = questions.indexOf(drawnQuestion);
 
-    // Create and append question to main element
-    var questionEl = document.createElement("h1");
-    questionEl.className = "question"; // No styles defined for this class in styles.css, but wanted to future-proof things
-    questionEl.textContent = drawnQuestion.question;
-    mainEl.appendChild(questionEl);
+        questions.splice(pos, 1);
+        questionsAnswered.push(drawnQuestion);
 
-    // Create answer container and append answer options
-    var divEl = document.createElement("div");
-    divEl.className = "answer-container";
-    mainEl.appendChild(divEl);
+        // Create and append question to main element
+        var questionEl = document.createElement("h1");
+        questionEl.className = "question"; // No styles defined for this class in styles.css, but wanted to future-proof things
+        questionEl.textContent = drawnQuestion.question;
+        mainEl.appendChild(questionEl);
 
-    var optionIndex = 0;
-    var i = 1;
-    while (optionIndex < drawnQuestion.options.length) {
-        var optionEl = document.createElement("button");
-        optionEl.className = "btn question-option";
-        optionEl.textContent = i + ". " + drawnQuestion.options[optionIndex];
-        if (drawnQuestion.answerIndex === optionIndex) {
-            optionEl.setAttribute("value", "correct");
-        } else {
-            optionEl.setAttribute("value", "wrong");
+        // Create answer container and append answer options
+        var divEl = document.createElement("div");
+        divEl.className = "answer-container";
+        mainEl.appendChild(divEl);
+
+        var optionIndex = 0;
+        var i = 1;
+        while (optionIndex < drawnQuestion.options.length) {
+            var optionEl = document.createElement("button");
+            optionEl.className = "btn question-option";
+            optionEl.textContent = i + ". " + drawnQuestion.options[optionIndex];
+            if (drawnQuestion.answerIndex === optionIndex) {
+                optionEl.setAttribute("value", "correct");
+            } else {
+                optionEl.setAttribute("value", "wrong");
+            }
+
+            divEl.appendChild(optionEl);
+            optionIndex++;
+            i++;
         }
 
-        divEl.appendChild(optionEl);
-        optionIndex++;
-        i++;
-    }
+        // Generate & Append Correct/Wrong Footer
+        if (!accuracy) {
+            var footerH2 = document.createElement("h2");
+            footerH2.className = "accuracy-footer";
+            footerEl = footerH2;
+        }
 
-    // Generate & Append Correct/Wrong Footer
-    if (!accuracy) {
-        var footerH2 = document.createElement("h2");
-        footerH2.className = "accuracy-footer";
-        footerEl = footerH2;
-    }
-
-    if (accuracy === "correct") {
-        footerEl.innerText = "Correct!";
-        mainEl.appendChild(footerEl);
-    } else if (accuracy === "wrong") {
-        footerEl.innerText = "Wrong!";
-        mainEl.appendChild(footerEl);
+        if (accuracy === "correct") {
+            footerEl.innerText = "Correct!";
+            mainEl.appendChild(footerEl);
+        } else if (accuracy === "wrong") {
+            footerEl.innerText = "Wrong!";
+            mainEl.appendChild(footerEl);
+        }
     }
 }
 
@@ -219,7 +284,12 @@ function btnClickHandler(event) {
         mainReset();
         questionGenerator();
         initializeClock();
-    } else if (clickedEl.matches("[value='correct']")) {
+    } else if(clickedEl.matches("[value='submitInitials']")) {
+        var userInitials = document.getElementById("user");
+        userInitials = userInitials.value;
+        mainReset();
+        saveScore(userInitials);
+    }  else if (clickedEl.matches("[value='correct']")) {
         sessionScore++;
         mainReset();
         questionGenerator("correct");

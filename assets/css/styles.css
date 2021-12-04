@@ -13,8 +13,11 @@ body {
 h1 {
     margin: 0;
 }
-/* Utility Styling */
+/* Start Utility Styling */
+
+/* Start/Home Page */
 .start-text {
+    width: 100%;
     text-align: center;
 }
 
@@ -23,7 +26,8 @@ h1 {
 }
 
 .question {
-    text-align: center;
+    text-align: left;
+    width: 100%;
 }
 
 .question-option {
@@ -47,8 +51,26 @@ h1 {
 
 .big-btn {
     font-size: 1.3rem;
+    margin: 0 auto;
     padding: 1rem;
 }
+
+.answer-container {
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 3rem;
+}
+
+.accuracy-footer {
+    width: 100%;
+    color: grey;
+    border-top: 2px solid grey;
+    opacity: 0.4;
+}
+
+/* End Utility Styling */
 
 /* Nav/Timer (Header) Bar Styling */
 header {
@@ -64,21 +86,51 @@ header {
 /* Main Styling */
 main {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     width: 90vw;
+    justify-content: center;
     margin: 5% auto 0;
 }
 
-.answer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width:100%;
-    margin-top: 1rem;
+/* Post-Game Score Submission and Display */
+.congrats {
+    width: 100%;
 }
 
-.accuracy-footer {
-    color: grey;
-    border-top: 2px solid grey;
-    opacity: 0.4;
+#initials-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
 }
+
+#user-input {
+    margin-top: 10px;
+}
+
+#submit {
+    margin-top: 15px;
+    height: 34px;
+    width: 40vw;
+}
+
+/* DELETES FOR BIGGER RESOLUTIONS
+
+main {
+    justify-content: normal;
+}
+
+.question-answer {
+    max-width: 50%;
+}
+
+#initials-container {
+    flex: 1;
+    margin-top: 20px;
+    Delete justify, align-items: center;
+}
+
+COMPLETELY RESET INDIVIDUAL MARGINS, etc for initials form items
+
+
+*/
